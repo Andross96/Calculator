@@ -1,0 +1,9 @@
+name: EasyCalculator
+main: fr.easycalculator.EasyCalculator
+version: 1
+author: _Andross
+description: Lightweight calculator directly in chat
+premissions:
+  easycalculator.access:
+    default: op
+    description: Access to the calculator
