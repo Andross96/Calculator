@@ -37,9 +37,9 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 			// example: "The result is =5+10"
 			// group0 = =5+10 | group1 = 5 | group2 = + | group3 = 10 |
 			while (m.find()) {
-		    	String result = "%f";
-				Double n1 = isNumeric(m.group(1));
-				Double n2 = isNumeric(m.group(3));
+		    	String result = null;
+				final Double n1 = isNumeric(m.group(1));
+				final Double n2 = isNumeric(m.group(3));
 				if(n1 == null || n2 == null) continue;
 				
 				switch(m.group(2)) {
@@ -52,6 +52,7 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 				
 				message = message.replace(m.group(0), result);
 		    }
+			
 			e.setMessage(message);
 		}catch (Exception ex) { }
 	}
