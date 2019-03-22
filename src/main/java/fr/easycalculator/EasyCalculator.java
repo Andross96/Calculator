@@ -14,7 +14,6 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 	
 	@Override
     public void onEnable() { 
-		saveDefaultConfig();
 		getServer().getPluginManager().registerEvents(this, this);
 		getLogger().info("EasyCalculator: Enabled."); 
 	}
