@@ -29,7 +29,7 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 			String message = e.getMessage();
 			if(message == null || message.isEmpty() || !message.contains("=")) return;
 	
-			final Pattern p = Pattern.compile("=(\\d*[\\.|\\,]?\\d+)(\\+|\\-|x|\\*|\\/|\\:)(\\d+[\\.|\\,]?\\d*)");
+			final Pattern p = Pattern.compile("=(-?\\d*[\\.|\\,]?\\d+)(\\+|\\-|x|\\*|\\/|\\:|\\%)(-?\\d+[\\.|\\,]?\\d*)");
 			final Matcher m = p.matcher(message);
 			final DecimalFormat formatter = new DecimalFormat("#.##");
 	
@@ -46,6 +46,7 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 					case "-": result = formatter.format(n1 - n2); break;
 					case "*":case "x": result = formatter.format(n1 * n2); break;
 					case "/":case ":": result = formatter.format(n1 / n2); break;
+					case "%": result = formatter.format(n1 % n2); break;
 					default: continue;
 				}
 				

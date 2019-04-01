@@ -1,6 +1,6 @@
 name: EasyCalculator
 main: fr.easycalculator.EasyCalculator
-version: 1
+version: 2
 author: _Andross
 description: Lightweight calculator directly in chat
 premissions:
