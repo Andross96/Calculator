@@ -23,34 +23,65 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 	
 	@EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
 	public void onPlayerChat(final AsyncPlayerChatEvent e) { 
-		if(!e.getPlayer().hasPermission("easycalculator.access")) return;
-		
 		try {
+			if(!e.getPlayer().hasPermission("easycalculator.access")) return;
+			
+			// Creating variables
 			String message = e.getMessage();
 			if(message == null || message.isEmpty() || !message.contains("=")) return;
-	
-			final Pattern p = Pattern.compile("=(-?\\d*[\\.|\\,]?\\d+)(\\+|\\-|x|\\*|\\/|\\:|\\%)(-?\\d+[\\.|\\,]?\\d*)");
-			final Matcher m = p.matcher(message);
+			Pattern p;
+			Matcher m;
 			final DecimalFormat formatter = new DecimalFormat("#.##");
+			
+			
 	
+			// Checking normal calculations:
 			// example: "The result is =5+10"
-			// group0 = =5+10 | group1 = 5 | group2 = + | group3 = 10 |
+			// group0: =5+10 | group1: 5 | group2: + | group3: 10
+			p = Pattern.compile("=(-?\\d*[\\.|\\,]?\\d+)(\\+|\\-|x|\\*|\\/|\\:|\\%)(-?\\d+[\\.|\\,]?\\d*)");
+			m = p.matcher(message);
 			while (m.find()) {
-		    	String result = null;
+		    	Double result = null;
 				final Double n1 = isNumeric(m.group(1));
 				final Double n2 = isNumeric(m.group(3));
 				if(n1 == null || n2 == null) continue;
 				
 				switch(m.group(2)) {
-					case "+": result = formatter.format(n1 + n2); break;
-					case "-": result = formatter.format(n1 - n2); break;
-					case "*":case "x": result = formatter.format(n1 * n2); break;
-					case "/":case ":": result = formatter.format(n1 / n2); break;
-					case "%": result = formatter.format(n1 % n2); break;
+					case "+": result = n1 + n2; break;
+					case "-": result = n1 - n2; break;
+					case "*":case "x": result = n1 * n2; break;
+					case "/":case ":": result = n1 / n2; break;
+					case "%": result = n1 % n2; break;
 					default: continue;
 				}
 				
-				message = message.replace(m.group(0), result);
+				if(result != null) message = message.replace(m.group(0), formatter.format(result));
+		    }
+			
+			
+			
+			// Checking functions calculations:
+			// example: "The result is =cos(15)"
+			// group0: =cos(15) | group1: cos | group2: 15
+			p = Pattern.compile("(?i)=(cos|sin|tan|sqrt|ln|log|exp)\\((\\d+)\\)");
+			m = p.matcher(message);
+			while (m.find()) {
+		    	Double result = null;
+				final Double n = isNumeric(m.group(2));
+				if(n == null) continue;
+				
+				switch(m.group(1)) {
+					case "cos": result = Math.cos(Math.toRadians(n)); break;
+					case "sin": result = Math.sin(Math.toRadians(n)); break;
+					case "tan": result = Math.tan(Math.toRadians(n)); break;
+					case "sqrt": result = Math.sqrt(n); break;
+					case "ln": result = Math.log(n); break;
+					case "log": result = Math.log(n)/Math.log(10); break;
+					case "exp": result = Math.exp(n); break;
+					default: continue;
+				}
+				
+				if(result != null) message = message.replace(m.group(0), formatter.format(result));
 		    }
 			
 			e.setMessage(message);

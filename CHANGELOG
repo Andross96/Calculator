@@ -1,3 +1,6 @@
+v3: Added functions calculations: '=function(number)'
+    -> cos, sin, tan, sqrt, ln, log, exp
+--------------------------------------------
 v2: Added modulo (%) operations & support of negative numbers.
 --------------------------------------------
 v1: Initial release
