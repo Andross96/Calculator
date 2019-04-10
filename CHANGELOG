@@ -1,9 +1,13 @@
+v5: 
+  -> Infinite calculation in a single format (e.g: =2+2+2...)
+  -> Functions now properly supports decimals numbers & negatives numbers (will still fail silently if function isn't valid)
+--------------------------------------------
 v4: Added new functions:
     -> Power function (pow2 & pow3)
-    -> Inverse trigonometric functions (arc) -> acos, asin, atan
+    -> Inverse trigonometric functions (arc) -> asin, acos, atan
 --------------------------------------------
 v3: Added functions calculations: '=function(number)'
-    -> cos, sin, tan, sqrt, ln, log, exp
+    -> sin, cos, tan, sqrt, ln, log, exp
 --------------------------------------------
 v2: Added modulo (%) operations & support of negative numbers.
 --------------------------------------------

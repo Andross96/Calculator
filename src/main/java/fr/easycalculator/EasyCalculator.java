@@ -29,52 +29,59 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 			// Creating variables
 			String message = e.getMessage();
 			if(message == null || message.isEmpty() || !message.contains("=")) return;
-			Pattern p;
 			Matcher m;
 			final DecimalFormat formatter = new DecimalFormat("#.##");
 			
 			
-	
 			// Checking normal calculations:
-			// example: "The result is =5+10"
-			// group0: =5+10 | group1: 5 | group2: + | group3: 10
-			p = Pattern.compile("=(-?\\d*[\\.|\\,]?\\d+)(\\+|\\-|x|\\*|\\/|\\:|\\%)(-?\\d+[\\.|\\,]?\\d*)");
-			m = p.matcher(message);
-			while (m.find()) {
-		    	Double result = null;
-				final Double n1 = isNumeric(m.group(1));
-				final Double n2 = isNumeric(m.group(3));
-				if(n1 == null || n2 == null) continue;
-				
-				switch(m.group(2)) {
-					case "+": result = n1 + n2; break;
-					case "-": result = n1 - n2; break;
-					case "*":case "x": result = n1 * n2; break;
-					case "/":case ":": result = n1 / n2; break;
-					case "%": result = n1 % n2; break;
-					default: continue;
-				}
-				
-				if(result != null) message = message.replace(m.group(0), formatter.format(result));
-		    }
-			
+			// Getting the calculation: "The result is =5+10+5" -> =5+10+5
+			m = Pattern.compile("=\\-?\\d+([\\.|\\,]\\d+)?((\\+|\\-|x|\\*|\\/|\\:|\\%)\\-?\\d+([\\.|\\,]\\d+)?)+").matcher(message);
+			if(m.matches()) {
+				// calcul: =5+10+5
+				final String calcul = m.group(0);
+
+				// firstNumber;
+				// group(0): =5 | group(1): 5
+				m = Pattern.compile("=(\\-?\\d+([\\.|\\,]\\d+)?)").matcher(calcul);
+				if(!m.find()) return;
+				Double result = toDouble(m.group(1));
+				if(result == null) return;
+
+				// Calculing the others numbers, on firstNumber
+				m = Pattern.compile("(\\+|\\-|x|\\*|\\/|\\:|\\%)(\\-?\\d+([\\.|\\,]\\d+)?)").matcher(calcul);
+				// Matches: +10 & +5
+				// group(0): +10 | group(1): + | group(2): 10
+				while (m.find()) {
+					final Double number = toDouble(m.group(2));
+					if(number == null) return;
+
+					switch(m.group(1)) {
+						case "+": result += number; break;
+						case "-": result -= number; break;
+						case "*":case "x": result *= number; break;
+						case "/":case ":": result /= number; break;
+						case "%": result %= number; break;
+						default: return;
+					}
+			    }
+				message = message.replace(calcul, formatter.format(result));
+			}
 			
 			
 			// Checking functions calculations:
 			// example: "The result is =cos(15)"
 			// group0: =cos(15) | group1: cos | group2: 15
-			p = Pattern.compile("(?i)=(cos|acos|sin|asin|tan|atan|sqrt|ln|log|exp|pow2|pow3)\\((\\d+)\\)");
-			m = p.matcher(message);
+			m = Pattern.compile("(?i)=(sin|asin|cos|acos|tan|atan|sqrt|ln|log|exp|pow2|pow3)\\((-?\\d*[\\.|\\,]?\\d+)\\)").matcher(message);
 			while (m.find()) {
 		    	Double result = null;
-				final Double n = isNumeric(m.group(2));
+				final Double n = toDouble(m.group(2));
 				if(n == null) continue;
 				
 				switch(m.group(1)) {
-					case "cos": result = Math.cos(Math.toRadians(n)); break;
-					case "acos": result = Math.acos(Math.toRadians(n)); break;
 					case "sin": result = Math.sin(Math.toRadians(n)); break;
 					case "asin": result = Math.asin(Math.toRadians(n)); break;
+					case "cos": result = Math.cos(Math.toRadians(n)); break;
+					case "acos": result = Math.acos(Math.toRadians(n)); break;
 					case "tan": result = Math.tan(Math.toRadians(n)); break;
 					case "atan": result = Math.atan(Math.toRadians(n)); break;
 					case "sqrt": result = Math.sqrt(n); break;
@@ -86,15 +93,15 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 					default: continue;
 				}
 				
-				if(result != null) message = message.replace(m.group(0), formatter.format(result));
+				if(result != null && !Double.isNaN(result)) message = message.replace(m.group(0), formatter.format(result));
 		    }
 			
 			e.setMessage(message);
 		}catch (Exception ex) { }
 	}
 	
-	private Double isNumeric(String str) { 
-		try { 
+	private Double toDouble(String str) { 
+		try {
 			str = str.replace(',', '.');
 			return Double.parseDouble(str);
 		} catch(Exception e) {  
