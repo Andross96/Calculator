@@ -63,7 +63,7 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 			// Checking functions calculations:
 			// example: "The result is =cos(15)"
 			// group0: =cos(15) | group1: cos | group2: 15
-			p = Pattern.compile("(?i)=(cos|sin|tan|sqrt|ln|log|exp)\\((\\d+)\\)");
+			p = Pattern.compile("(?i)=(cos|acos|sin|asin|tan|atan|sqrt|ln|log|exp|pow2|pow3)\\((\\d+)\\)");
 			m = p.matcher(message);
 			while (m.find()) {
 		    	Double result = null;
@@ -72,12 +72,17 @@ public class EasyCalculator extends JavaPlugin implements Listener {
 				
 				switch(m.group(1)) {
 					case "cos": result = Math.cos(Math.toRadians(n)); break;
+					case "acos": result = Math.acos(Math.toRadians(n)); break;
 					case "sin": result = Math.sin(Math.toRadians(n)); break;
+					case "asin": result = Math.asin(Math.toRadians(n)); break;
 					case "tan": result = Math.tan(Math.toRadians(n)); break;
+					case "atan": result = Math.atan(Math.toRadians(n)); break;
 					case "sqrt": result = Math.sqrt(n); break;
 					case "ln": result = Math.log(n); break;
 					case "log": result = Math.log(n)/Math.log(10); break;
 					case "exp": result = Math.exp(n); break;
+					case "pow2": result = Math.pow(n, 2); break;
+					case "pow3": result = Math.pow(n, 3); break;
 					default: continue;
 				}
 				

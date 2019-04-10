@@ -1,3 +1,7 @@
+v4: Added new functions:
+    -> Power function (pow2 & pow3)
+    -> Inverse trigonometric functions (arc) -> acos, asin, atan
+--------------------------------------------
 v3: Added functions calculations: '=function(number)'
     -> cos, sin, tan, sqrt, ln, log, exp
 --------------------------------------------
