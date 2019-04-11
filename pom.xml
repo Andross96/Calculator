@@ -4,7 +4,7 @@
 
   <groupId>fr.easycalculator</groupId>
   <artifactId>EasyCalculator</artifactId>
-  <version>v5</version>
+  <version>v6</version>
   <packaging>jar</packaging>
 
   <name>EasyCalculator</name>
