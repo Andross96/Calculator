@@ -1,11 +1,15 @@
+v7:
+  -> Adding silent calculation (using '@' at the begin) to show the result only for the sender
+  -> Code cleanup
+--------------------------------------------
 v6: 
--> Added new functions:
-  -> Factorial (fac) (!)
-  -> Random (rnd) (return random integer between 0 & the value you enter)
--> Remade permissions:
-  -> easycalculator.* = access to all the calculator
-  -> easycalculator.operations = permission for accessing simple operations
-  -> easycalculator.functions = permission for accessing functions operations
+  -> Added new functions:
+    -> Factorial (fac) (!)
+    -> Random (rnd) (return random integer between 0 & the value you enter)
+  -> Remade permissions:
+    -> easycalculator.* = access to all the calculator
+    -> easycalculator.operations = permission for accessing simple operations
+    -> easycalculator.functions = permission for accessing functions operations
 --------------------------------------------
 v5: 
   -> Infinite calculation in a single format (e.g: =2+2+2...)
