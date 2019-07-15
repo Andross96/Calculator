@@ -17,18 +17,24 @@ public class EasyCalculator extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        getLogger().info("EasyCalculator: Enabled.");
     }
 
-    @Override
-    public void onDisable() { getLogger().info("EasyCalculator: Disabled."); }
+    private final Pattern allP = Pattern.compile("=\\-?\\d+([\\.|\\,]\\d+)?(([+\\-x*/:%])\\-?\\d+([\\.|\\,]\\d+)?)+");
+    private final Pattern firstP = Pattern.compile("=(\\-?\\d+([\\.|\\,]\\d+)?)");
+    private final Pattern othersP = Pattern.compile("([+\\-x*/:%])(\\-?\\d+([\\.|\\,]\\d+)?)");
+    private final Pattern functionsP = Pattern.compile("(?i)=(sin|asin|cos|acos|tan|atan|sqrt|ln|log|exp|pow2|pow3|fac|rnd)\\((-?\\d*[\\.|\\,]?\\d+)\\)");
 
     @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerChat(final AsyncPlayerChatEvent e) {
         try {
-            // Creating variables
+            // Checking message
             String message = e.getMessage();
             if(message.isEmpty() || (!message.startsWith("=") && !message.startsWith("@="))) return;
+
+            // Checking permission
+            final boolean operations = e.getPlayer().hasPermission("easycalculator.operations");
+            final boolean functions = e.getPlayer().hasPermission("easycalculator.functions");
+            if(!operations && !functions) return;
 
             // Checking silent
             final boolean silent = message.startsWith("@=");
@@ -37,23 +43,23 @@ public class EasyCalculator extends JavaPlugin implements Listener {
             Matcher m;
             final DecimalFormat formatter = new DecimalFormat("#.##");
 
-            if(e.getPlayer().hasPermission("easycalculator.operations")) {
+            if(operations) {
                 // Checking normal calculations:
                 // Getting the calculation: "The result is =5+10+5" -> =5+10+5
-                m = Pattern.compile("=\\-?\\d+([\\.|\\,]\\d+)?(([+\\-x*/:%])\\-?\\d+([\\.|\\,]\\d+)?)+").matcher(message);
+                m = allP.matcher(message);
                 if(m.matches()) {
                     // calcul: =5+10+5
                     final String calcul = m.group(0);
 
                     // firstNumber;
                     // group(0): =5 | group(1): 5
-                    m = Pattern.compile("=(\\-?\\d+([\\.|\\,]\\d+)?)").matcher(calcul);
+                    m = firstP.matcher(calcul);
                     if(!m.find()) return;
                     Double result = toDouble(m.group(1));
                     if(result == null) return;
 
                     // Calculing the others numbers, on firstNumber
-                    m = Pattern.compile("([+\\-x*/:%])(\\-?\\d+([\\.|\\,]\\d+)?)").matcher(calcul);
+                    m = othersP.matcher(calcul);
                     // Matches: +10 & +5
                     // group(0): +10 | group(1): + | group(2): 10
                     while (m.find()) {
@@ -73,11 +79,11 @@ public class EasyCalculator extends JavaPlugin implements Listener {
                 }
             }
 
-            if(e.getPlayer().hasPermission("easycalculator.functions")) {
+            if(functions) {
                 // Checking functions calculations:
                 // example: "The result is =cos(15)"
                 // group0: =cos(15) | group1: cos | group2: 15
-                m = Pattern.compile("(?i)=(sin|asin|cos|acos|tan|atan|sqrt|ln|log|exp|pow2|pow3|fac|rnd)\\((-?\\d*[\\.|\\,]?\\d+)\\)").matcher(message);
+                m = functionsP.matcher(message);
                 while (m.find()) {
                     Double result;
                     final Double n = toDouble(m.group(2));
@@ -108,8 +114,7 @@ public class EasyCalculator extends JavaPlugin implements Listener {
             // Checking if it's a silent calculation
             if (silent) {
                 e.setCancelled(true);
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&e[&r\u2211&e] &7" + e.getMessage().substring(2) + " = &l&a" + message.replace("=", "")));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&e[&r\u2211&e] &l&a" + message));
             } else e.setMessage(message);
         } catch (Exception ex) { /* Nothing */ }
     }

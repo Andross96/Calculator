@@ -1,3 +1,8 @@
+v7.1:
+  -> Fixed calculations problems (included with "@")
+  -> Fixed permissions problems
+  -> Optimized regex pattern
+--------------------------------------------
 v7:
   -> Adding silent calculation (using '@' at the begin) to show the result only for the sender
   -> Code cleanup

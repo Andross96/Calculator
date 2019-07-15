@@ -1,11 +1,10 @@
 name: EasyCalculator
 main: fr.andross.EasyCalculator
-version: '7.0'
+version: '7.1'
 author: Andross
 description: Lightweight calculator directly in chat
 premissions:
   easycalculator.*:
-    default: op
     description: Access to all the calculator
     children:
       easycalculator.operations: true
