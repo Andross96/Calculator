@@ -71,7 +71,9 @@ class Utils {
                     .replace("sin", "Math.sin")
                     .replace("sqrt", "Math.sqrt")
                     .replace("tan", "Math.tan")
-                    .replace(",", ".")));
+                    .replace(",", ".")
+                    .replace("x", "*")
+                    .replace(":", "/")));
         } catch (final Exception e) {
             return null;
         }
