@@ -1,5 +1,5 @@
-# EasyCalculator
-EasyCalculator is a simple lightweight calculator that calculate automatically operations in chat messages.
+# Calculator
+Calculator is a powerful lightweight calculator that calculate automatically operations in chat messages.
 
 ## Links
 * [Spigot thread](https://www.spigotmc.org/resources/easycalculator.65811/) / [Bukkit thread](https://dev.bukkit.org/projects/easycalculator)
