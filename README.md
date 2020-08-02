@@ -11,6 +11,7 @@ Calculator is a powerful lightweight calculator that calculate automatically ope
 Simply use = before your operation and the plugin will calculate and show you the result.
 Adding a @ before will broadcast the result.
 The plugin will fail silently if the operation isn't correct.
+
 ![How to use](https://www.spigotmc.org/attachments/gif-gif.500393/)
 
 ### Permission
