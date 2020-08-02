@@ -1,30 +1,61 @@
+/*
+ * Calculator - Powerful and lightweight calculator directly in chat
+ * Copyright (C) 2020 André Sustac
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package fr.andross.calculator;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.text.DecimalFormat;
 
-class Utils {
-    private final static ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-    private final static DecimalFormat format = new DecimalFormat("#.##");
-    private static final char COLOR_CHAR = '\u00A7';
+/**
+ * Utility class
+ * @version 1.1
+ * @author Andross
+ */
+final class Utils {
+    private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+    private final DecimalFormat format = new DecimalFormat("#.##");
+    private final String prefix = color("&e[&r\u2211&e] ");
 
-    static String color(final String text) {
-        char[] b = text.toCharArray();
-        for (int i = 0; i < b.length - 1; i++) {
-            if (b[i] == '&' && "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i+1]) > -1) {
-                b[i] = COLOR_CHAR;
-                b[i+1] = Character.toLowerCase(b[i+1]);
-            }
-        }
-        return new String(b);
+    /**
+     * Colorize a text
+     * @param text text to colorize
+     * @return the colored text
+     */
+    @NotNull
+    protected String color(@NotNull final String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
-    static String calculate(final Player p, final String calculation) {
+    /**
+     * Try to evaluate & calculate from a String
+     * @param p the player
+     * @param calculation the calculation
+     * @return the result, null if it's not a valid calculation
+     */
+    @Nullable
+    protected String calculate(final Player p, final String calculation) {
         try {
             // Locations?
             if (calculation.startsWith("loc")) {
@@ -45,7 +76,8 @@ class Utils {
             }
 
             // Calculating
-            return format.format(engine.eval(calculation.toLowerCase().replace("e", "Math.E")
+            return format.format(engine.eval(calculation.toLowerCase()
+                    .replace("e", "Math.E")
                     .replace("pi", "Math.PI")
                     .replace("sqrt2", "Math.SQRT2")
                     .replace("sqrt1_2", "Math.SQRT1_2")
@@ -79,7 +111,14 @@ class Utils {
         }
     }
 
-    private static Location getLocation(final World w, final String coords) {
+    /**
+     * Trying to get a location object from coords
+     * @param w the world from
+     * @param coords coordinates string
+     * @return a location object, null if not valid
+     */
+    @Nullable
+    protected Location getLocation(final World w, final String coords) {
         try {
             final String[] s = coords.split(";");
             if (s.length != 3) return null;
@@ -95,7 +134,13 @@ class Utils {
         }
     }
 
-    private static Double toDouble(final String str) {
+    /**
+     * Trying to parse a double
+     * @param str string
+     * @return the double value from the string, otherwise null
+     */
+    @Nullable
+    protected Double toDouble(final String str) {
         try {
             return Double.parseDouble(str.replace(',', '.'));
         } catch (final Exception e) {
@@ -103,4 +148,12 @@ class Utils {
         }
     }
 
+    /**
+     * Get the prefix of the plugin
+     * @return prefix of the plugin
+     */
+    @NotNull
+    public String getPrefix() {
+        return prefix;
+    }
 }
