@@ -1,6 +1,5 @@
 # Calculator ![GPL-3.0](http://cdn.andross.fr/badges/license.svg) ![Stable](http://cdn.andross.fr/badges/stable.svg) ![Version](http://cdn.andross.fr/badges/v1.1.svg) ![Discord](http://cdn.andross.fr/badges/discord.svg)
 
----
 ### Description
 Calculator is a powerful lightweight calculator that calculate automatically operations in chat messages.
 
