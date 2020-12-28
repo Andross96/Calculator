@@ -30,7 +30,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class Calculator extends JavaPlugin {
     private final Utils utils = new Utils();
-
+    private String lastresult = null;
+    
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvent(AsyncPlayerChatEvent.class, new Listener() {}, EventPriority.LOWEST, (l, event) -> {
@@ -53,13 +54,17 @@ public final class Calculator extends JavaPlugin {
 
             try {
                 // Calculating
+                if(lastresult != null){
+                    calculation = calculation.replace("ans",lastresult);
+                }
                 final String result = utils.calculate(p, calculation);
                 if (result == null) {
                     p.sendMessage(utils.color("&cInvalid calculation entered."));
                     e.setCancelled(true);
                     return;
                 }
-
+                lastresult = result;
+                
                 // Result
                 final String finalMessage = utils.getPrefix() + utils.color("&7" + calculation + " = &a" + result);
                 if (broadcast) e.setMessage(finalMessage);
